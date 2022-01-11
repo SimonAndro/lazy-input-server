@@ -1,0 +1,11 @@
+body {
+    background-color: aliceblue;
+}
+
+#play-ground {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 300px;
+    margin-top: 10px;
+    background-color:black;
+}
