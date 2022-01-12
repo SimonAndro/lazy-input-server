@@ -1,62 +1,16 @@
 $(function () {
 
-    var touchStartX = 0,
-        touchStartY = 0;
-    var touchEndX = 0,
-        touchEndY = 0;
-    var moveX = 0.0,
-        moveY = 0.0;
+    /**
+     * Mouse handling
+     */
     var targetDirectionX, targetDirectionY;
 
-    startTouch = false;
-
-    $('#play-ground').on('touchstart vmousedown', function (event) {
-        console.log('Touch start: ', event.pageX, event.pageY);
-        // $("#start").html(event.pageX + "->>" + event.pageY);
-
-        startTouch = true;
-        touchStartX = event.pageX;
-        touchStartY = event.pageY;
-    })
-
-
     $('#play-ground').on('touchend vmouseup', function (event) {
-        $("#end").html(event.pageX + "->>" + event.pageY);
-
-        touchEndX = event.pageX;
-        touchEndY = event.pageY;
-
-        $.ajax({
-            url: "/mouse-stop",
-            type: "GET",
-            success: function (res) {
-                console.log(res);
-                $("#res").html(res);
-            },
-            error: function (res) {
-                console.log(res);
-                $("#res").html(res);
-            }
-        });
-
+        ajaxRequest("/mouse-stop");
     });
 
     $("#id-keyboard").on("focusout", function () {
         $("#key-holder").html("Keyboard");
-    });
-
-    $("#id-keyboard").on("input", function (event) {
-
-        // console.log(event,$("#id-keyboard").val())
-        var input = $("#id-keyboard").val();
-
-        if (input.trim().length == 0) {
-            input = "Space";
-        } else {
-
-            $("#key-holder").html(input);
-        }
-        $("#id-keyboard").val(""); // clear input
     });
 
     //Enable swiping...
@@ -93,57 +47,147 @@ $(function () {
             targetDirectionY = 0;
             targetDirectionX = 0;
             if (currentDirection == "up") {
-                
+
                 targetDirectionY = -1;
             }
 
             if (currentDirection == "right") {
-                
+
                 targetDirectionX = 1;
             }
 
             if (currentDirection == "down") {
-                
+
                 targetDirectionY = 1;
             }
 
             if (currentDirection == "left") {
-                
+
                 targetDirectionX = -1;
             }
 
             $("#move").html(targetDirectionX + "->>" + targetDirectionY);
 
-            //send information to server
-            $.ajax({
-                url: "/mouse-move",
-                type: "GET",
-                data: {
-                    x: targetDirectionX ,
-                    y: targetDirectionY ,
-                    end: true
-                },
-                success: function (res) {
-                    console.log(res);
-                    $("#res").html(res);
-                },
-                error: function (res) {
-                    console.log(res);
-                    $("#res").html(res);
-                }
-            });
+            //send information to server         
+            var data = {
+                x: targetDirectionX,
+                y: targetDirectionY,
+                end: true
+            };
+            ajaxRequest("/mouse-move", "GET", data);
+        },
+        tap: function (event, target) {
+            $("#test").html("tap");
+
+            ajaxRequest("/tap");
+        },
+        doubleTap: function (event, target) {
+            $("#test").html("double tap");
+
+            ajaxRequest("/double-tap");
+        },
+        longTap: function (event, target) {
+            $("#test").html("long tap");
+
+            ajaxRequest("/long-tap");
         },
         threshold: 200,
         maxTimeThreshold: 5000,
         fingers: 'all'
     });
 
+    var scrollBtnTop = 160;
+    var scrollDefault = 160
+    var repeat = 1;
+
+    $("#scroll-btn").swipe({
+        swipeStatus: function (event, phase, direction, distance, duration, fingers, fingerData, currentDirection) {
+       
+            if (phase == "end" || phase == "cancel"){ // snap back
+                scrollBtnTop = scrollDefault;
+                repeat = 1;
+            }
+
+            if (currentDirection == "up") {
+                if (scrollBtnTop>scrollDefault-50)
+                    scrollBtnTop = scrollBtnTop - repeat++;
+            }
+
+
+            if (currentDirection == "down") {
+                if (scrollBtnTop<scrollDefault+50)
+                scrollBtnTop = scrollBtnTop + repeat++;
+            }
+
+            $("#scroll-btn-ctn").css({"top":scrollBtnTop+"px"});
+
+            //send information to server         
+            // var data = {
+            //     x: targetDirectionX,
+            //     y: targetDirectionY,
+            //     end: true
+            // };
+            //ajaxRequest("/scroll-move", "GET", data);
+        },
+        tap: function (event, target) {
+            // $("#test").html("tap");
+
+            // ajaxRequest("/tap");
+        },
+        doubleTap: function (event, target) {
+            // $("#test").html("double tap");
+
+            // ajaxRequest("/double-tap");
+        },
+        longTap: function (event, target) {
+            // $("#test").html("long tap");
+
+            // ajaxRequest("/long-tap");
+        },
+        threshold: 200,
+        maxTimeThreshold: 5000,
+        fingers: 'all'
+    });
+
+    /**
+     * Keyboard handling
+     */
+    $("#id-keyboard").on("input", function (event) {
+
+        // console.log(event,$("#id-keyboard").val())
+        var input = $("#id-keyboard").val();
+
+        if (input.trim().length == 0) {
+            input = "Space";
+        } else {
+
+            $("#key-holder").html(input);
+        }
+        $("#id-keyboard").val(""); // clear input
+    });
+
 
 }());
 
 
-function swipeDirection(direction) {
+function ajaxRequest(url, type, data) {
 
+    type = type || "GET";
+    data = data || {};
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: data,
+        success: function (res) {
+            console.log(res);
+            $("#res").html(res);
+        },
+        error: function (res) {
+            console.log(res);
+            $("#res").html(res);
+        }
+    });
 }
 
 function supportOptionChange(t) {
