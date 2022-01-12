@@ -77,17 +77,20 @@ $(function () {
             ajaxRequest("/mouse-move", "GET", data);
         },
         tap: function (event, target) {
-            $("#test").html("tap");
+            //$("#test").html("tap");
 
-            ajaxRequest("/tap");
+            if (!targetDirectionX && !targetDirectionY) {
+                ajaxRequest("/mouse-left");
+            }
+
         },
         doubleTap: function (event, target) {
-            $("#test").html("double tap");
+            //$("#test").html("double tap");
 
             ajaxRequest("/double-tap");
         },
         longTap: function (event, target) {
-            $("#test").html("long tap");
+            //$("#test").html("long tap");
 
             ajaxRequest("/long-tap");
         },
@@ -102,24 +105,26 @@ $(function () {
 
     $("#scroll-btn").swipe({
         swipeStatus: function (event, phase, direction, distance, duration, fingers, fingerData, currentDirection) {
-       
-            if (phase == "end" || phase == "cancel"){ // snap back
+
+            if (phase == "end" || phase == "cancel") { // snap back
                 scrollBtnTop = scrollDefault;
                 repeat = 1;
             }
 
             if (currentDirection == "up") {
-                if (scrollBtnTop>scrollDefault-50)
+                if (scrollBtnTop > scrollDefault - 50)
                     scrollBtnTop = scrollBtnTop - repeat++;
             }
 
 
             if (currentDirection == "down") {
-                if (scrollBtnTop<scrollDefault+50)
-                scrollBtnTop = scrollBtnTop + repeat++;
+                if (scrollBtnTop < scrollDefault + 50)
+                    scrollBtnTop = scrollBtnTop + repeat++;
             }
 
-            $("#scroll-btn-ctn").css({"top":scrollBtnTop+"px"});
+            $("#scroll-btn-ctn").css({
+                "top": scrollBtnTop + "px"
+            });
 
             //send information to server         
             // var data = {
@@ -148,6 +153,16 @@ $(function () {
         maxTimeThreshold: 5000,
         fingers: 'all'
     });
+
+    $("#left-click").on("click", function () {
+        ajaxRequest("/mouse-left");
+    });
+
+    $("#right-click").on("click", function () {
+        ajaxRequest("/mouse-right");
+    });
+
+
 
     /**
      * Keyboard handling

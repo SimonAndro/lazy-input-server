@@ -26,11 +26,11 @@
 #include <string.h>
 
 #include <tchar.h>
+
 #include <windows.h>
 
-POINT pt; // cursor location
-static int repeat = 1;     // repeat key counter
-
+POINT pt;              // cursor location
+static int repeat = 1; // repeat key counter
 
 const char *get_content_type(const char *path)
 {
@@ -364,6 +364,72 @@ int parseRequest(char *cmd, char *request, struct mouse_move *mouseDirection)
     return 0; // success return
 }
 
+/**
+ * @brief  moveMouse
+ * 
+ */
+void moveMouse()
+{
+    GetCursorPos(&pt);
+
+    // printf("%d, %d\n", mouseDirection.xDirection, mouseDirection.yDirection);
+
+    if (mouseDirection.xDirection < 0) // left arrow
+        pt.x -= repeat;
+
+    if (mouseDirection.xDirection > 0) // right arrow
+        pt.x += repeat;
+
+    if (mouseDirection.yDirection < 0) // up arrow
+        pt.y -= repeat;
+
+    if (mouseDirection.yDirection > 0) // down arrow
+        pt.y += repeat;
+
+    SetCursorPos(pt.x, pt.y);
+
+    if (repeat < 10)
+        repeat += 2; // Increment repeat count.
+}
+
+/**
+ * @brief rightClick, right click mouse button
+ * 
+ */
+void rightClick()
+{
+    INPUT Input = {0};
+    // right down
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
+    SendInput(1, &Input, sizeof(INPUT));
+
+    // right up
+    ZeroMemory(&Input, sizeof(INPUT));
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
+/**
+ * @brief leftClick, left click mouse button
+ * 
+ */
+void leftClick()
+{
+    INPUT Input = {0};
+    // left down
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+    SendInput(1, &Input, sizeof(INPUT));
+
+    // left up
+    ZeroMemory(&Input, sizeof(INPUT));
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
 int main()
 {
 
@@ -446,7 +512,10 @@ int main()
                         printf("\n");
 
                         char mouse_move_req[] = "GET /mouse-move";
-                        char mouse_stop_req[] = "GET /mouse-stop"; 
+                        char mouse_stop_req[] = "GET /mouse-stop";
+                        char mouse_left_req[] = "GET /mouse-left";
+                        char mouse_right_req[] = "GET /mouse-right";
+                        char mouse_doubleTap_req[] = "GET /double-tap";
 
                         if (strncmp("GET /", client->request, 5))
                         {
@@ -465,72 +534,28 @@ int main()
                             }
                             else
                             {
-                                GetCursorPos(&pt);
-
-                                printf("%d, %d\n", mouseDirection.xDirection, mouseDirection.yDirection);
-
-                                if (mouseDirection.xDirection < 0) // left arrow
-                                    pt.x -= repeat;
-
-                                if (mouseDirection.xDirection > 0) // right arrow
-                                    pt.x += repeat;
-
-                                if (mouseDirection.yDirection < 0) // up arrow
-                                    pt.y -= repeat;
-
-                                if (mouseDirection.yDirection > 0) // down arrow
-                                    pt.y += repeat;
-
-                                SetCursorPos(pt.x, pt.y);
-                
-                                if(repeat < 10)  repeat+=2; // Increment repeat count.
-
-                               // switch (message) /* handle the messages */
-                                // {
-
-                                // case WM_KEYDOWN:
-
-                                //     GetCursorPos(&pt);
-
-                                //     // Convert screen coordinates to client coordinates.
-                                //     ScreenToClient(hwnd, &pt);
-
-                                //     switch (wParam)
-                                //     {
-                                //     // mouse clicks
-                                //     case 'K':
-                                //         ClientToScreen(hwnd, &pt);
-                                //         activeHWND = WindowFromPoint(pt);
-                                //         SendMessageCallbackA(activeHWND, WM_KEYDOWN, 'Q', NULL, NULL, NULL);
-                                //         return 0;
-                                //         break;
-                                //         // Move the cursor to reflect which
-                                //         // arrow keys are pressed.
-
-                                //     default:
-                                //         return 0;
-                                //     }
-
-                                //     repeat++; // Increment repeat count.
-
-                                //     // Convert client coordinates to screen coordinates.
-                                //     ClientToScreen(hwnd, &pt);
-                                //     SetCursorPos(pt.x, pt.y);
-                                //     return 0;
-
-                                // case WM_KEYUP:
-
-                                //     repeat = 1; // Clear repeat count.
-                                //     return 0;
-                                // default: /* for messages that we don't deal with */
-                                //     return DefWindowProc(hwnd, message, wParam, lParam);
-                                // }
-
-                                send_200(client);
+                                moveMouse();
+                                send_200(client);                
                             }
                         }
+                        else if (!strncmp(mouse_left_req, client->request, strlen(mouse_left_req)))
+                        {//mouse left click command
+                            leftClick();
+                            send_200(client);
+                        }
+                        else if (!strncmp(mouse_right_req, client->request, strlen(mouse_right_req)))
+                        {//mouse right click command
+                            rightClick();
+                            send_200(client);
+                        }
+                        else if (!strncmp(mouse_doubleTap_req, client->request, strlen(mouse_doubleTap_req)))
+                        {//mouse double click command
+                            leftClick();
+                            leftClick();
+                            send_200(client);
+                        }
                         else if (!strncmp(mouse_stop_req, client->request, strlen(mouse_stop_req)))
-                        {
+                        {//mouse stop move command
                             repeat = 1;
                             send_200(client);
                         }
