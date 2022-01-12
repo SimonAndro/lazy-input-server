@@ -106,7 +106,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
         GetCursorPos(&pt);
 
         // Convert screen coordinates to client coordinates.
-
         ScreenToClient(hwnd, &pt);
 
         switch (wParam)
