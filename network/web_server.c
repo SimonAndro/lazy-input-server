@@ -483,7 +483,7 @@ int main()
 
                                 SetCursorPos(pt.x, pt.y);
                 
-                                if(repeat < 10)  repeat++; // Increment repeat count.
+                                if(repeat < 10)  repeat+=2; // Increment repeat count.
 
                                // switch (message) /* handle the messages */
                                 // {

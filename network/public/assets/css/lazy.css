@@ -9,3 +9,8 @@ body {
     margin-top: 10px;
     background-color:black;
 }
+
+.keyboard-trigger .ui-input-text{
+     border: none !important;
+     margin: 0 !important;
+}

@@ -33,18 +33,18 @@
                    top: 160px;
                    ">
                 <div class="">
-                    <button id="scroll-btn">Scroll</button>
+                    <button style="border-radius: 50% 50% 50% 0%" id="scroll-btn">Scroll</button>
                 </div>
             </div>
         </div>
         <div style="text-align: center; margin-top:10px;">
-            <button style="border-radius: 50% !important;" class="ui-btn ui-btn-inline">Left Click</button>
-            <button style="border-radius: 50% !important;" class="ui-btn ui-btn-inline">Right Click</button>
+            <button style="border-radius: 120% 50% 0% 0% !important; width:40%;" class="ui-btn ui-btn-inline">Left Click</button>
+            <button style="border-radius: 50% 120% 0% 0% !important; width:40%;" class="ui-btn ui-btn-inline">Right Click</button>
         </div>
-        <div>
-            <button onclick="return showKeyboard(this);">
+        <div style="text-align: center;">
+            <button style="width:83%;" class="keyboard-trigger ui-btn ui-btn-inline" onclick="return showKeyboard(this);">
                 <span id="key-holder">Keyboard</span>
-                <input style="position:fixed;left:120%" type="text" name="keyboard" id="id-keyboard"
+                <input autocorrect="off" autocapitalize="none" autocomplete="off" style="position:fixed;left:120%; border: none ;" type="text" name="keyboard" id="id-keyboard"
                     placeholder="Keyboard">
             </button>
         </div>
@@ -68,9 +68,9 @@
         <div id="res">
 
         </div> -->
-        <div id="test">
+        <!-- <div id="test">
 
-        </div>
+        </div> -->
     </div>
     <script type="text/javascript" src="assets/js/lazy.js"></script>
 </body>

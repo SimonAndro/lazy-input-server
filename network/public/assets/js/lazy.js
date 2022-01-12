@@ -92,7 +92,7 @@ $(function () {
             ajaxRequest("/long-tap");
         },
         threshold: 200,
-        maxTimeThreshold: 5000,
+        maxTimeThreshold: 10000,
         fingers: 'all'
     });
 
