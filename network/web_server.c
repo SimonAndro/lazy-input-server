@@ -368,7 +368,7 @@ int parseRequest(char *cmd, char *request, struct mouse_move *mouseDirection)
  * @brief  moveMouse
  * 
  */
-void moveMouse()
+void moveMouse(struct mouse_move mouseDirection)
 {
     GetCursorPos(&pt);
 
@@ -427,6 +427,54 @@ void leftClick()
     ZeroMemory(&Input, sizeof(INPUT));
     Input.type = INPUT_MOUSE;
     Input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
+/**
+ * @brief mouseScrollUp, scroll wheel scrolling upwards
+ * 
+ */
+void mouseScrollUp()
+{
+    INPUT Input = {0};
+    // scroll up
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_WHEEL;
+    Input.mi.mouseData = repeat++;
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
+/**
+ * @brief mouseScrollDown, scroll wheel scrolling downwards
+ * 
+ */
+void mouseScrollDown()
+{
+    INPUT Input = {0};
+    // scroll down
+    ZeroMemory(&Input, sizeof(INPUT));
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_WHEEL;
+    Input.mi.mouseData = -repeat++;
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
+/**
+ * @brief middle button, middle mouse button dowm
+ * 
+ */
+void middleClick()
+{
+    INPUT Input = {0};
+    // left down
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
+    SendInput(1, &Input, sizeof(INPUT));
+
+    // left up
+    ZeroMemory(&Input, sizeof(INPUT));
+    Input.type = INPUT_MOUSE;
+    Input.mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
     SendInput(1, &Input, sizeof(INPUT));
 }
 
@@ -516,6 +564,9 @@ int main()
                         char mouse_left_req[] = "GET /mouse-left";
                         char mouse_right_req[] = "GET /mouse-right";
                         char mouse_doubleTap_req[] = "GET /double-tap";
+                        char mouse_scrollUp_req[] = "GET /scroll-up";
+                        char mouse_scrollDown_req[] = "GET /scroll-down";
+                        char mouse_scrollWheelDown_req[] = "GET /wheel-down";
 
                         if (strncmp("GET /", client->request, 5))
                         {
@@ -534,29 +585,44 @@ int main()
                             }
                             else
                             {
-                                moveMouse();
-                                send_200(client);                
+                                moveMouse(mouseDirection);
+                                send_200(client);
                             }
                         }
                         else if (!strncmp(mouse_left_req, client->request, strlen(mouse_left_req)))
-                        {//mouse left click command
+                        { //mouse left click command
                             leftClick();
                             send_200(client);
                         }
                         else if (!strncmp(mouse_right_req, client->request, strlen(mouse_right_req)))
-                        {//mouse right click command
+                        { //mouse right click command
                             rightClick();
                             send_200(client);
                         }
                         else if (!strncmp(mouse_doubleTap_req, client->request, strlen(mouse_doubleTap_req)))
-                        {//mouse double click command
+                        { //mouse double click command
                             leftClick();
                             leftClick();
                             send_200(client);
                         }
                         else if (!strncmp(mouse_stop_req, client->request, strlen(mouse_stop_req)))
-                        {//mouse stop move command
+                        { //mouse stop move command
                             repeat = 1;
+                            send_200(client);
+                        }
+                        else if (!strncmp(mouse_scrollUp_req, client->request, strlen(mouse_scrollUp_req)))
+                        { //mouse scroll upwards command
+                            mouseScrollUp();
+                            send_200(client);
+                        }
+                        else if (!strncmp(mouse_scrollDown_req, client->request, strlen(mouse_scrollDown_req)))
+                        { //mouse scroll downwards command
+                            mouseScrollDown();
+                            send_200(client);
+                        }
+                        else if (!strncmp(mouse_scrollWheelDown_req, client->request, strlen(mouse_scrollWheelDown_req)))
+                        { //mouse middle button down command
+                            middleClick();
                             send_200(client);
                         }
                         else
