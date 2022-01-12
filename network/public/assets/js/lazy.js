@@ -72,8 +72,8 @@ $(function () {
         fingers: 'all'
     });
 
-    var scrollBtnTop = 160;
-    var scrollDefault = 160
+    var scrollBtnTop = 150;
+    var scrollDefault = 150
     var repeat = 1;
 
     $("#scroll-btn").swipe({
