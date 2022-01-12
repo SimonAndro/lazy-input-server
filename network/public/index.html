@@ -10,6 +10,8 @@
     <script type="text/javascript" src="assets/plugins/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="assets/plugins/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="assets/plugins/swipe/swipe.js"></script>
+
+    <link rel="stylesheet" href="assets/plugins/keyboard/keyboard.css">
     <title>Lazy Input</title>
 </head>
 
@@ -23,7 +25,7 @@
 
             </div>
 
-            <div id ="scroll-btn-ctn" style="-webkit-transform: rotate(-90deg);
+            <div id="scroll-btn-ctn" style="-webkit-transform: rotate(-90deg);
                     -moz-transform: rotate(-90deg);   
                     -ms-transform: rotate(-90deg);   
                     -o-transform: rotate(-90deg);   
@@ -33,21 +35,31 @@
                    top: 160px;
                    ">
                 <div class="">
-                    <button style="border-radius: 50% 50% 50% 0%" id="scroll-btn">Scroll</button>
+                    <button style="border-radius: 30% 30% 30% 30%" id="scroll-btn">Scroll</button>
                 </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top:10px;">
-            <button id="left-click" style="border-radius: 120% 50% 0% 0% !important; width:40%;" class="ui-btn ui-btn-inline">Left Click</button>
-            <button id="right-click" style="border-radius: 50% 120% 0% 0% !important; width:40%;" class="ui-btn ui-btn-inline">Right Click</button>
+        <div style="text-align: center; margin-top:10px; width:100%;">
+            <button id="left-click" style="border-radius: 120% 50% 0% 0% !important; margin:0px; width:49%;"
+                class="ui-btn ui-btn-inline">Left Click</button>
+            <button id="right-click" style="border-radius: 50% 120% 0% 0% !important;  margin:0px; width:49%;"
+                class="ui-btn ui-btn-inline">Right Click</button>
         </div>
         <div style="text-align: center;">
-            <button style="width:83%;" class="keyboard-trigger ui-btn ui-btn-inline" onclick="return showKeyboard(this);">
-                <span id="key-holder">Keyboard</span>
-                <input autocorrect="off" autocapitalize="none" autocomplete="off" style="position:fixed;left:120%; border: none ;" type="text" name="keyboard" id="id-keyboard"
+            <button style="width:100%; border-radius: 0;" class="keyboard-trigger ui-btn ui-btn-inline"
+                onclick="return showKeyboard(this);">
+                <span id="key-holder">Start typing...</span>
+                <input autocorrect="off" autocapitalize="none" autocomplete="off"
+                    style="position:fixed;left:120%; border: none ;" type="text" name="keyboard" id="id-keyboard"
                     placeholder="Keyboard">
             </button>
         </div>
+
+        <div>
+            <!-- <input class="input" placeholder="Tap on the virtual keyboard to start" /> -->
+            <div class="simple-keyboard"></div>
+        </div>
+
         <!-- <div style="margin: 10px; position: fixed; bottom: 0px; right: 0;">
             <a data-dialog="true" href="coffee.html">
                 ❤ Buy me a Coffee
@@ -72,6 +84,7 @@
 
         </div> -->
     </div>
+    <script src="assets/plugins/keyboard/keyboard.js"></script>
     <script type="text/javascript" src="assets/js/lazy.js"></script>
 </body>
 

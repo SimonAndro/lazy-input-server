@@ -478,6 +478,19 @@ void middleClick()
     SendInput(1, &Input, sizeof(INPUT));
 }
 
+/**
+ * @brief keyboardInput, sends keyboard input messages
+ * 
+ * @return void 
+ */
+void keyboardInput()
+{
+    INPUT Input = {0};
+    Input.type = INPUT_KEYBOARD;
+    Input.ki.wVk = 
+    SendInput(1, &Input, sizeof(INPUT));
+}
+
 int main()
 {
 
