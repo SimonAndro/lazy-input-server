@@ -483,7 +483,7 @@ int main()
 
                                 SetCursorPos(pt.x, pt.y);
                 
-                                if(repeat < 5)  repeat++; // Increment repeat count.
+                                if(repeat < 10)  repeat++; // Increment repeat count.
 
                                // switch (message) /* handle the messages */
                                 // {
@@ -532,6 +532,7 @@ int main()
                         else if (!strncmp(mouse_stop_req, client->request, strlen(mouse_stop_req)))
                         {
                             repeat = 1;
+                            send_200(client);
                         }
                         else
                         {
