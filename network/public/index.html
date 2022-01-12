@@ -7,25 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/plugins/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" href="assets/css/lazy.css">
+    <script type="text/javascript" src="assets/plugins/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/jquery.mobile-1.4.5.min.js"></script>
     <title>Lazy Input</title>
 </head>
 
 <body>
     <div id="main">
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top:10px;">
             You are using Lazy Input 😂😂😂
         </div>
         <div id="play-ground">
 
         </div>
         <div style="text-align: center; margin-top:10px;">
-            <button style="margin-right: 30px;">
-                Left Click
-            </button>
-            <button>
-                Right Click
+            <button class="ui-btn ui-btn-inline">Left Click</button>
+            <button class="ui-btn ui-btn-inline">Right Click</button>
+        </div>
+        <div>
+            <button onclick="return showKeyboard(this);">
+                <span id="key-holder">Keyboard</span>
+                <input style="position:fixed;left:120%" type="text" name="keyboard" id="id-keyboard" placeholder="Keyboard">
             </button>
         </div>
+        <!-- <div style="margin: 10px; position: fixed; bottom: 0px; right: 0;">
+            <a data-dialog="true" href="coffee.html">
+                ❤ Buy me a Coffee
+            </a>
+        </div> -->
         start
         <div id="start">
 
@@ -39,8 +48,6 @@
 
         </div>
     </div>
-    <script type="text/javascript" src="assets/plugins/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="assets/js/lazy.js"></script>
 </body>
 

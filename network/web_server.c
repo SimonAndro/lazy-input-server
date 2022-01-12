@@ -23,6 +23,7 @@
  */
 
 #include "header.h"
+#include <string.h>
 
 
 const char *get_content_type(const char* path) {
@@ -87,7 +88,7 @@ SOCKET create_socket(const char* host, const char *port) {
 
 
 
-#define MAX_REQUEST_SIZE 2047
+#define MAX_REQUEST_SIZE 4095
 
 struct client_info {
     socklen_t address_length;
@@ -266,6 +267,55 @@ void serve_resource(struct client_info *client, const char *path) {
     drop_client(client);
 }
 
+// mouse move command
+struct mouse_move {
+    int xDirection;
+    int yDirection;
+};
+
+int parseRequest(char* cmd, char* request, struct mouse_move* mouseDirection)
+{
+    if(!strcmp(cmd, "mouse"))
+    {
+
+        char delim_1[] = "=";
+        char delim_2[] = "&";
+
+        char *ptr_x, *ptr_y, *ptr;
+        ptr_x = strtok(request, delim_1);
+        ptr_x = strtok(NULL, delim_1);
+        ptr_y = strtok(NULL, delim_1);
+
+        int xDir=0, yDir=0;
+
+        //printf("%s, %s\n", ptr_x, ptr_y);
+
+        // parse x
+        if(ptr_x != NULL)
+        {
+            ptr = strtok(ptr_x, delim_2);
+            xDir = atoi(ptr);
+            printf("x = '%d'\n", xDir);
+        }
+
+        // parse y
+        if(ptr_y != NULL)
+        {
+            ptr = strtok(ptr_y, delim_2);
+            yDir = atoi(ptr);
+            printf("y = '%d'\n", yDir);
+        }
+
+        mouseDirection->xDirection = xDir;
+        mouseDirection->yDirection = yDir;
+
+    }else{
+        return -1; // unknown command
+    }
+
+    return 0; // success return
+}
+
 
 int main() {
 
@@ -334,15 +384,25 @@ int main() {
                     if (q) {
                         *q = 0;
 
+                        printf("%d",strlen(client->request));
+                        printf("\n");
                         printf(client->request);
                         printf("\n");
-
+                        
                         if (strncmp("GET /", client->request, 5)) {
                             send_400(client);
                         } 
-                        // else if(strncmp("mouse_move",client->request, 5)){
-                        //     printf(client->request);
-                        // }
+                        else if(!strncmp("GET /00",client->request, 7)){ //mouse move command
+
+                            char request_buffer[255]  = {0};
+                            struct mouse_move mouseDirection = {0};
+                            int res = parseRequest("mouse",client->request, &mouseDirection);
+
+                            if(res) // invalid result from request parser
+                            {
+                                send_400(client);
+                            }
+                        }
                         else {
                             char *path = client->request + 4;
                             char *end_path = strstr(path, " ");
