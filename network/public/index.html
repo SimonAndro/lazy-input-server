@@ -51,14 +51,13 @@
             <button style="width:100%; border-radius: 0;" class="keyboard-trigger ui-btn ui-btn-inline"
                 onclick="return showKeyboard(this);">
                 <span id="key-holder">Start typing...</span>
-                <input autocorrect="off" autocapitalize="none" autocomplete="off"
+                <input class="input" autocorrect="off" autocapitalize="none" autocomplete="off"
                     style="position:fixed;left:120%; border: none ;" type="text" name="keyboard" id="id-keyboard"
                     placeholder="Keyboard">
             </button>
         </div>
 
-        <div>
-            <!-- <input class="input" placeholder="Tap on the virtual keyboard to start" /> -->
+        <div class="keyboard-container">
             <div class="simple-keyboard"></div>
         </div>
 

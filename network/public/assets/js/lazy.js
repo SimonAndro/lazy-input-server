@@ -9,10 +9,6 @@ $(function () {
         ajaxRequest("/mouse-stop");
     });
 
-    $("#id-keyboard").on("focusout", function () {
-        $("#key-holder").html("Keyboard");
-    });
-
     //Enable swiping...
     $("#play-ground").swipe({
         swipeStatus: function (event, phase, direction, distance, duration, fingers, fingerData, currentDirection) {
@@ -125,27 +121,6 @@ $(function () {
     $("#right-click").on("click", function () {
         ajaxRequest("/mouse-right");
     });
-
-
-
-    /**
-     * Keyboard handling
-     */
-    $("#id-keyboard").on("input", function (event) {
-
-        // console.log(event,$("#id-keyboard").val())
-        var input = $("#id-keyboard").val();
-
-        if (input.trim().length == 0) {
-            input = "Space";
-        } else {
-
-            $("#key-holder").html(input);
-        }
-        $("#id-keyboard").val(""); // clear input
-    });
-
-
 }());
 
 
@@ -180,24 +155,56 @@ function supportOptionChange(t) {
 }
 
 function showKeyboard() {
-    $("#id-keyboard").trigger("focus");
+    if ($(".keyboard-container:visible").length) {
+        $(".keyboard-container").slideUp();
+        $("#key-holder").html("Start typing...");
+    } else {
+        $(".keyboard-container").slideDown();
+    }
 }
 
-//.,l,l;;;;;;;;;;;;;;;;
+//keyboard handling
 const Keyboard = window.SimpleKeyboard.default;
 
 const myKeyboard = new Keyboard({
-  onChange: input => onChange(input),
-  onKeyPress: button => onKeyPress(button)
+    onChange: input => onChange(input),
+    onKeyPress: button => onKeyPress(button)
 });
 
 
 function onChange(input) {
-  document.querySelector(".input").value = input;
-  console.log("Input changed", input);
+    document.querySelector(".input").value = input;
+    myKeyboard.clearInput();
+
+    console.log("Input changed", input);
+
 }
 
 
 function onKeyPress(button) {
-  console.log("Button pressed", button);
+    console.log("Button pressed", button);
+
+    var input = button; // $("#id-keyboard").val();
+
+    if (input.trim().length == 0) {
+        input = "Space";
+    } else {
+
+        $("#key-holder").html(input);
+    }
+    $("#id-keyboard").val(""); // clear input
+
+    /**
+     * If you want to handle the shift and caps lock buttons
+     */
+    if (button === "{shift}" || button === "{lock}") handleShift();
+}
+
+function handleShift() {
+    let currentLayout = myKeyboard.options.layoutName;
+    let shiftToggle = currentLayout === "default" ? "shift" : "default";
+
+    myKeyboard.setOptions({
+        layoutName: shiftToggle
+    });
 }
