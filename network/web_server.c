@@ -23,7 +23,6 @@
  */
 
 #include "header.h"
-#include <string.h>
 
 #include <tchar.h>
 
@@ -320,7 +319,7 @@ struct mouse_move
     int yDirection;
 };
 
-int parseRequest(char *cmd, char *request, struct mouse_move *mouseDirection)
+int parseMouseRequest(char *cmd, char *request, struct mouse_move *mouseDirection)
 {
     if (!strcmp(cmd, "mouse"))
     {
@@ -359,6 +358,39 @@ int parseRequest(char *cmd, char *request, struct mouse_move *mouseDirection)
     else
     {
         return -1; // unknown command
+    }
+    
+    return 0; // success return
+}
+
+int parseKeyboardRequest(char *request, DWORD* virtualKey, int* isShift)
+{
+    char delim_1[] = "=";
+    char delim_2[] = "&";
+
+    *isShift = 0;
+
+    int keyHex = 0;
+
+    char *ptr_x, *ptr_y, *ptr;
+    ptr_x = strtok(request, delim_1);
+    ptr_x = strtok(NULL, delim_1);
+    ptr_y = strtok(NULL, delim_1);
+
+    // parse virtual key
+    if (ptr_x != NULL)
+    {
+        ptr = strtok(ptr_x, delim_2);
+        *virtualKey = (DWORD)strtol(ptr, NULL, 16); 
+        printf("virtualKey = '%0x'\n", *virtualKey);
+    }
+
+    // parse shift status
+    if (ptr_y != NULL)
+    {
+        ptr = strtok(ptr_y, delim_2);
+        *isShift = atoi(ptr);
+        printf("isShift = '%d'\n", *isShift);
     }
 
     return 0; // success return
@@ -399,6 +431,7 @@ void moveMouse(struct mouse_move mouseDirection)
 void rightClick()
 {
     INPUT Input = {0};
+    ZeroMemory(&Input, sizeof(INPUT));
     // right down
     Input.type = INPUT_MOUSE;
     Input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
@@ -418,6 +451,7 @@ void rightClick()
 void leftClick()
 {
     INPUT Input = {0};
+    ZeroMemory(&Input, sizeof(INPUT));
     // left down
     Input.type = INPUT_MOUSE;
     Input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
@@ -437,6 +471,7 @@ void leftClick()
 void mouseScrollUp()
 {
     INPUT Input = {0};
+    ZeroMemory(&Input, sizeof(INPUT));
     // scroll up
     Input.type = INPUT_MOUSE;
     Input.mi.dwFlags = MOUSEEVENTF_WHEEL;
@@ -451,6 +486,7 @@ void mouseScrollUp()
 void mouseScrollDown()
 {
     INPUT Input = {0};
+    ZeroMemory(&Input, sizeof(INPUT));
     // scroll down
     ZeroMemory(&Input, sizeof(INPUT));
     Input.type = INPUT_MOUSE;
@@ -466,6 +502,7 @@ void mouseScrollDown()
 void middleClick()
 {
     INPUT Input = {0};
+    ZeroMemory(&Input, sizeof(INPUT));
     // left down
     Input.type = INPUT_MOUSE;
     Input.mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
@@ -483,12 +520,39 @@ void middleClick()
  * 
  * @return void 
  */
-void keyboardInput()
+void keyboardInput(DWORD virtualKey, int isShift)
 {
-    INPUT Input = {0};
+    INPUT    Input= {0};
+
+    if (isShift)
+    { //simulate shift key down
+        ZeroMemory(&Input,sizeof(INPUT));
+        Input.type = INPUT_KEYBOARD;
+        Input.ki.wVk = VK_LSHIFT;
+        SendInput(1,&Input,sizeof(INPUT));
+    }
+
+    // simulate pressing the key
+    ZeroMemory(&Input,sizeof(INPUT));
     Input.type = INPUT_KEYBOARD;
-    Input.ki.wVk = 
-    SendInput(1, &Input, sizeof(INPUT));
+    Input.ki.wVk = virtualKey;
+    SendInput(1,&Input,sizeof(INPUT));
+
+    // simulate releasing the key
+    ZeroMemory(&Input,sizeof(INPUT));
+    Input.type = INPUT_KEYBOARD;
+    Input.ki.wVk = virtualKey;
+    Input.ki.dwFlags = KEYEVENTF_KEYUP;
+    SendInput(1,&Input,sizeof(INPUT));
+
+    if (isShift)
+    { //simulate release of the shift key
+        ZeroMemory(&Input,sizeof(INPUT));
+        Input.type = INPUT_KEYBOARD;
+        Input.ki.wVk = VK_LSHIFT;
+        Input.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1,&Input,sizeof(INPUT));
+    }
 }
 
 int main()
@@ -580,6 +644,7 @@ int main()
                         char mouse_scrollUp_req[] = "GET /scroll-up";
                         char mouse_scrollDown_req[] = "GET /scroll-down";
                         char mouse_scrollWheelDown_req[] = "GET /wheel-down";
+                        char keyboard_key[] = "GET /keyboard";
 
                         if (strncmp("GET /", client->request, 5))
                         {
@@ -590,7 +655,7 @@ int main()
 
                             char request_buffer[255] = {0};
                             struct mouse_move mouseDirection = {0};
-                            int res = parseRequest("mouse", client->request, &mouseDirection);
+                            int res = parseMouseRequest("mouse", client->request, &mouseDirection);
 
                             if (res) // invalid result from request parser
                             {
@@ -636,6 +701,18 @@ int main()
                         else if (!strncmp(mouse_scrollWheelDown_req, client->request, strlen(mouse_scrollWheelDown_req)))
                         { //mouse middle button down command
                             middleClick();
+                            send_200(client);
+                        }
+                        else if (!strncmp(keyboard_key, client->request, strlen(keyboard_key)))
+                        { //keyboard input
+
+                            DWORD virtualKey;
+                            int isShift = 0;
+
+                            parseKeyboardRequest(client->request, &virtualKey, &isShift);
+
+                            keyboardInput(virtualKey, isShift);
+
                             send_200(client);
                         }
                         else
