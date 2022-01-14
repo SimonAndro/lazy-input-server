@@ -567,7 +567,7 @@ int main()
     }
 #endif
 
-    SOCKET server = create_socket("192.168.43.99", "2023");
+    SOCKET server = create_socket("0.0.0.0", "2023");
 
     while (1)
     {
