@@ -1,2 +1,0 @@
-E:/msys64/mingw64/bin/ar.exe qc libwebServer.a CMakeFiles/webServer.dir/src/webServer.c.obj
-E:/msys64/mingw64/bin/ranlib.exe libwebServer.a
