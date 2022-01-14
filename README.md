@@ -1,5 +1,5 @@
 # Lazy Input, the world is this Simple!
-Lazy input is utility app for controlling the computer using a mobile device.
+Lazy input is a utility app for controlling the computer using a mobile device.
 The controlled computer and the controlling device need to be connected to the same WIFI network.
 No need to install any mobile app, everything happens between the lazy input server on your computer and a browser on your mobile device.
 
