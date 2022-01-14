@@ -1,10 +1,10 @@
 # Lazy Input, the world is this Simple!
 Lazy input is utility app for controlling the computer using a mobile device.
 The controlled computer and the controlling device need to be connected to the same WIFI network.
-No need to install any mobile app, everything happens between the server you run on the computer and a browser on the mobile device.
+No need to install any mobile app, everything happens between the lazy input server on your computer and a browser on your mobile device.
 
 ### How to Use:
-1. (Download)[https://download.com] and run the latest release of the lazy input server.
+1. [Download](https://download.com) and run the latest release of the lazy input server.
 2. Connect the computer and the mobile device onto the same WIFI network.
 3. From the browser on the mobile device, visit the computer IP address and port onto which the lazy input server is listening.
 4. That's it.
