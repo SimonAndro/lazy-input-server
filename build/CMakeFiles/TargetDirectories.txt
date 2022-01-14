@@ -1,0 +1,6 @@
+F:/C-projects/lazy input server/lazy-input-server/build/CMakeFiles/rebuild_cache.dir
+F:/C-projects/lazy input server/lazy-input-server/build/CMakeFiles/LazyInput.dir
+F:/C-projects/lazy input server/lazy-input-server/build/CMakeFiles/edit_cache.dir
+F:/C-projects/lazy input server/lazy-input-server/build/network/CMakeFiles/webServer.dir
+F:/C-projects/lazy input server/lazy-input-server/build/network/CMakeFiles/edit_cache.dir
+F:/C-projects/lazy input server/lazy-input-server/build/network/CMakeFiles/rebuild_cache.dir

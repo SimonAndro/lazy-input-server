@@ -1,35 +1,17 @@
-/*
- * MIT License
- *
- * Copyright (c) 2018 Lewis Van Winkle
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 
-#include "header.h"
+
+#include "../include/network.h"
 
 #include <tchar.h>
 
 #include <windows.h>
 
+#include "../include/webServer.h"
+
 POINT pt;              // cursor location
 static int repeat = 1; // repeat key counter
+
+HWND progressTextHwnd, urlTextHwnd;
 
 const char *get_content_type(const char *path)
 {
@@ -82,6 +64,8 @@ SOCKET create_socket(const char *host, const char *port)
     getaddrinfo(host, port, &hints, &bind_address);
 
     printf("Creating socket...\n");
+    SetWindowTextA(progressTextHwnd, "Creating socket...");
+
     SOCKET socket_listen;
     socket_listen = socket(bind_address->ai_family,
                            bind_address->ai_socktype, bind_address->ai_protocol);
@@ -92,6 +76,7 @@ SOCKET create_socket(const char *host, const char *port)
     }
 
     printf("Binding socket to local address...\n");
+    SetWindowTextA(progressTextHwnd, "Binding");
     if (bind(socket_listen,
              bind_address->ai_addr, bind_address->ai_addrlen))
     {
@@ -101,10 +86,45 @@ SOCKET create_socket(const char *host, const char *port)
     freeaddrinfo(bind_address);
 
     printf("Listening...\n");
+    SetWindowTextA(progressTextHwnd, "Listening...");
     if (listen(socket_listen, 100) < 0)
     {
         fprintf(stderr, "listen() failed. (%d)\n", GETSOCKETERRNO());
         exit(1);
+    }
+
+    // To retrieve host information
+    struct hostent *localHost;
+    char *localIP;
+    struct in_addr **addr_list;
+
+    // Get the local host information
+    localHost = gethostbyname("");
+    localIP = inet_ntoa(*(struct in_addr *)*localHost->h_addr_list);
+
+    addr_list = (struct in_addr **)localHost->h_addr_list;
+
+    char serverUrl[64] = {0};
+    char http_str[] = "http://";
+    char urlsBuffer[256];
+
+    for (int i = 0; addr_list[i] != NULL; i++)
+    {
+        localIP = inet_ntoa(*addr_list[i]);
+        printf(localIP);
+
+        memset(serverUrl, 0, sizeof(serverUrl));
+        strcat(serverUrl, http_str);
+        strcat(serverUrl, localIP);
+        strcat(serverUrl, ":");
+        strcat(serverUrl, port);
+        strcat(serverUrl, "\n");
+
+        GetWindowTextA(urlTextHwnd, urlsBuffer, sizeof(urlsBuffer));
+
+        strcat(urlsBuffer, serverUrl);
+
+        SetWindowTextA(urlTextHwnd, urlsBuffer);
     }
 
     return socket_listen;
@@ -359,11 +379,11 @@ int parseMouseRequest(char *cmd, char *request, struct mouse_move *mouseDirectio
     {
         return -1; // unknown command
     }
-    
+
     return 0; // success return
 }
 
-int parseKeyboardRequest(char *request, DWORD* virtualKey, int* isShift)
+int parseKeyboardRequest(char *request, DWORD *virtualKey, int *isShift)
 {
     char delim_1[] = "=";
     char delim_2[] = "&";
@@ -381,7 +401,7 @@ int parseKeyboardRequest(char *request, DWORD* virtualKey, int* isShift)
     if (ptr_x != NULL)
     {
         ptr = strtok(ptr_x, delim_2);
-        *virtualKey = (DWORD)strtol(ptr, NULL, 16); 
+        *virtualKey = (DWORD)strtol(ptr, NULL, 16);
         printf("virtualKey = '%0x'\n", *virtualKey);
     }
 
@@ -522,52 +542,58 @@ void middleClick()
  */
 void keyboardInput(DWORD virtualKey, int isShift)
 {
-    INPUT    Input= {0};
+    INPUT Input = {0};
 
     if (isShift)
     { //simulate shift key down
-        ZeroMemory(&Input,sizeof(INPUT));
+        ZeroMemory(&Input, sizeof(INPUT));
         Input.type = INPUT_KEYBOARD;
         Input.ki.wVk = VK_LSHIFT;
-        SendInput(1,&Input,sizeof(INPUT));
+        SendInput(1, &Input, sizeof(INPUT));
     }
 
     // simulate pressing the key
-    ZeroMemory(&Input,sizeof(INPUT));
+    ZeroMemory(&Input, sizeof(INPUT));
     Input.type = INPUT_KEYBOARD;
     Input.ki.wVk = virtualKey;
-    SendInput(1,&Input,sizeof(INPUT));
+    SendInput(1, &Input, sizeof(INPUT));
 
     // simulate releasing the key
-    ZeroMemory(&Input,sizeof(INPUT));
+    ZeroMemory(&Input, sizeof(INPUT));
     Input.type = INPUT_KEYBOARD;
     Input.ki.wVk = virtualKey;
     Input.ki.dwFlags = KEYEVENTF_KEYUP;
-    SendInput(1,&Input,sizeof(INPUT));
+    SendInput(1, &Input, sizeof(INPUT));
 
     if (isShift)
     { //simulate release of the shift key
-        ZeroMemory(&Input,sizeof(INPUT));
+        ZeroMemory(&Input, sizeof(INPUT));
         Input.type = INPUT_KEYBOARD;
         Input.ki.wVk = VK_LSHIFT;
         Input.ki.dwFlags = KEYEVENTF_KEYUP;
-        SendInput(1,&Input,sizeof(INPUT));
+        SendInput(1, &Input, sizeof(INPUT));
     }
 }
 
-int main()
+void runServer(void *param)
 {
+
+    HWND *handlesEx = (HWND *)param;
+    progressTextHwnd = handlesEx[0];
+    urlTextHwnd = handlesEx[1];
 
 #if defined(_WIN32)
     WSADATA d;
     if (WSAStartup(MAKEWORD(2, 2), &d))
     {
         fprintf(stderr, "Failed to initialize.\n");
-        return 1;
+        return;
     }
 #endif
 
     SOCKET server = create_socket("0.0.0.0", "2023");
+
+    char progressMsg[256] = {0};
 
     while (1)
     {
@@ -589,11 +615,17 @@ int main()
             {
                 fprintf(stderr, "accept() failed. (%d)\n",
                         GETSOCKETERRNO());
-                return 1;
+                return;
             }
 
             printf("New connection from %s.\n",
                    get_client_address(client));
+
+            memset(progressMsg, 0, sizeof(progressMsg));
+            strcat(progressMsg, get_client_address(client));
+            strcat(progressMsg, " connected");
+
+            SetWindowTextA(progressTextHwnd, progressMsg);
         }
 
         struct client_info *client = clients;
@@ -620,6 +652,10 @@ int main()
                     printf("Unexpected disconnect from %s.\n",
                            get_client_address(client));
                     drop_client(client);
+
+                    memset(progressMsg, 0, sizeof(progressMsg));
+                    strcat(progressMsg, get_client_address(client));
+                    strcat(progressMsg, " disconnected");
                 }
                 else
                 {
@@ -746,5 +782,4 @@ int main()
 #endif
 
     printf("Finished.\n");
-    return 0;
 }

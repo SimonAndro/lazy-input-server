@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/C-projects/lazy input server/lazy-input-server/network/include/network.h
+winsock2.h
+-
+ws2tcpip.h
+-
+sys/types.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+netdb.h
+-
+unistd.h
+-
+errno.h
+-
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+
+F:/C-projects/lazy input server/lazy-input-server/network/include/webServer.h
+
+F:/C-projects/lazy input server/lazy-input-server/network/src/webServer.c
+../include/network.h
+F:/C-projects/lazy input server/lazy-input-server/network/include/network.h
+tchar.h
+-
+windows.h
+-
+../include/webServer.h
+F:/C-projects/lazy input server/lazy-input-server/network/include/webServer.h
+
