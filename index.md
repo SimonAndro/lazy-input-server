@@ -3,10 +3,10 @@ Lazy input is a utility app for controlling the computer using a mobile device.
 The controlled computer and the controlling device need to be connected to the same WIFI network.
 No need to install any mobile app, everything happens between the lazy input server on your computer and a browser on your mobile device.
 
- ### how the server looks like:
+### how the server looks like:
 ![Server side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/serverapp.JPG "Server side view")
  
- ### how the client looks like: 
+### how the client looks like: 
 ![Client side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/bg.bmp "Client side view") 
   
   
