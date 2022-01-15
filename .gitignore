@@ -60,3 +60,4 @@ dkms.conf
 !bin/*.exe
 
 build
+*.bak
