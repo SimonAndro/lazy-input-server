@@ -11,7 +11,7 @@ No need to install any mobile app, everything happens between the lazy input ser
   
   
 ### How to Use:
-1. [Download](https://github.com/SimonAndro/lazy-input-server/raw/main/release/v1.0/lazy%20input.zip) the latest release of the lazy input server and unzip it into a directory.
+1. [Download](https://github.com/SimonAndro/lazy-input-server/raw/main/release/v1.0/Lazy%20input.zip) the latest release of the lazy input server and unzip it into a directory.
 2. Connect the computer and the mobile device onto the same WIFI network.
 3. From the directory where you put the unzipped folder, run the lazy input server.
 4. From the browser on the mobile device, visit the computer IP address and port onto which the lazy input server is listening as shown in the server window.
