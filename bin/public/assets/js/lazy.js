@@ -63,8 +63,8 @@ $(function () {
 
             ajaxRequest("/long-tap");
         },
-        threshold: 200,
-        maxTimeThreshold: 10000,
+        threshold: 2000,
+        maxTimeThreshold: 500,
         fingers: 'all'
     });
 
@@ -109,8 +109,8 @@ $(function () {
             }
 
         },
-        threshold: 200,
-        maxTimeThreshold: 5000,
+        threshold: 2000,
+        maxTimeThreshold: 500,
         fingers: 'all'
     });
 
@@ -131,7 +131,7 @@ function ajaxRequest(url, type, data) {
 
     $.ajax({
         url: url,
-        type: "GET",
+        type: type,
         data: data,
         success: function (res) {
             console.log(res);
