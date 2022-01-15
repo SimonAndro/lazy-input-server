@@ -16,3 +16,7 @@ No need to install any mobile app, everything happens between the lazy input ser
 3. From the directory where you put the unzipped folder, run the lazy input server.
 4. From the browser on the mobile device, visit the computer IP address and port onto which the lazy input server is listening as shown in the server window.
 5. That's it!
+
+
+### Supported systems:
+- Currently supports only Windows system.
