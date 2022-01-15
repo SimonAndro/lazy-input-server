@@ -6,6 +6,11 @@ No need to install any mobile app, everything happens between the lazy input ser
 <div align="center">
  
 ![Server side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/serverapp.JPG "Server side view")
+ 
+</div>
+
+<div align="center">
+  
 ![Client side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/bg.bmp "Client side view") 
   
 </div>
