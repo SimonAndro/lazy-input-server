@@ -1,37 +1,13 @@
-## Welcome to GitHub Pages
+# Lazy Input, the world is this Simple!
+Lazy input is a utility app for controlling the computer using a mobile device.
+The controlled computer and the controlling device need to be connected to the same WIFI network.
+No need to install any mobile app, everything happens between the lazy input server on your computer and a browser on your mobile device.
 
-You can use the [editor on GitHub](https://github.com/SimonAndro/lazy-input-server/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![Client side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/bg.bmp "Client side view")
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SimonAndro/lazy-input-server/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### How to Use:
+1. [Download](https://github.com/SimonAndro/lazy-input-server/raw/main/release/v1.0/lazy%20input.zip) the latest release of the lazy input server and unzip it into a directory.
+2. Connect the computer and the mobile device onto the same WIFI network.
+3. From the directory where you put the unzipped folder, run the lazy input server.
+4. From the browser on the mobile device, visit the computer IP address and port onto which the lazy input server is listening as shown in the server window.
+5. That's it!
