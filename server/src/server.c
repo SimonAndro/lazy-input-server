@@ -296,7 +296,7 @@ void runServer(void *param)
                         }
                         else if (!strncmp(mouse_stop_req, client->request, strlen(mouse_stop_req)))
                         { //mouse stop move command
-                            repeat = 1;
+                            resetMouse();
                             send_200(&client_list, client);
                         }
                         else if (!strncmp(mouse_scrollUp_req, client->request, strlen(mouse_scrollUp_req)))

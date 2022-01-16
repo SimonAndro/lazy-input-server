@@ -36,8 +36,8 @@ file(GLOB SOURCES "src/*")
 
 
 # 指定生成目标
-# add_executable(LazyInput WIN32 ${SOURCES})
-add_executable(LazyInput ${SOURCES})
+add_executable(LazyInput WIN32 ${SOURCES})
+# add_executable(LazyInput ${SOURCES})
 
 target_link_libraries(LazyInput
     server

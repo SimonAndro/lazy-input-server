@@ -13,10 +13,7 @@ struct mouse_move
     int yDirection;
 };
 
-POINT pt;              // cursor location
-static int repeat = 1; // repeat key counter
-
-
+void resetMouse(); // resets mouse speed
 void moveMouse(struct mouse_move mouseDirection); // moving the mouse
 void rightClick(); // mouse right click button 
 void leftClick(); // mouse left click button

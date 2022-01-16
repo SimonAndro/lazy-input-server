@@ -3,6 +3,15 @@
 
 #include "../include/simulation.h"
 
+POINT pt;              // cursor location
+
+static int repeat = 1; // repeat key counter
+
+// resets mouse speed
+void resetMouse()
+{
+    repeat = 1;
+}
 
 /**
  * @brief moveMouse, moves mouse
