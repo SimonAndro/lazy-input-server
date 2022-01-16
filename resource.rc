@@ -1,7 +1,0 @@
-#include "resource.h"
-
-// an icon
-IDI_MYICON ICON "assets/icon.ico"
-
-// background image
-IDB_BACKGROUND BITMAP DISCARDABLE "assets/bg.bmp"

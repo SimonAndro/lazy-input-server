@@ -1,10 +1,8 @@
 
-windres -i resource.rc -o lib/resource.o
+@REM windres -i server-ui/src/resource.rc -o lib/resource.o
 
-:: rm -fr bin
-:: mkdir bin
-rm -fr build
-mkdir build
+@REM rm -fr build
+@REM mkdir build
 cd build
 
 cmake -G "Unix Makefiles" "../"

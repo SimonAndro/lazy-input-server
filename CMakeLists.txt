@@ -12,6 +12,8 @@ SET(CMAKE_RC_COMPILE_OBJECT
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../bin)
 
 add_subdirectory(network)
+add_subdirectory(server)
+add_subdirectory(simulation)
 
 # 设置可执行文件生成路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../bin)
@@ -29,15 +31,17 @@ SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -std=c11")
 
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_LIB_SRCS 变量
-aux_source_directory(. DIR_SRCS)
-aux_source_directory(assets DIR_SRCS)
+include_directories(include)
+file(GLOB SOURCES "src/*")
+
 
 # 指定生成目标
-add_executable(LazyInput WIN32 ${DIR_SRCS}  lib/resource.o)
-# add_executable(LazyInput ${DIR_SRCS}  lib/resource.o)
+# add_executable(LazyInput WIN32 ${SOURCES})
+add_executable(LazyInput ${SOURCES})
 
 target_link_libraries(LazyInput
-    webServer
-    gdi32
+    server
+    network 
+    simulation
 )
 

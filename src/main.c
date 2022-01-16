@@ -1,17 +1,7 @@
-#if defined(UNICODE) && !defined(_UNICODE)
-#define _UNICODE
-#elif defined(_UNICODE) && !defined(UNICODE)
-#define UNICODE
-#endif
 
-#include <stdio.h>
-#include <tchar.h>
-#include <windows.h>
-#include <process.h>
+#include "../server/include/server.h"
 
-#include "resource.h"
-#include "network/include/webServer.h"
-
+#include "../include/main.h"
 
 const char g_szClassName[] = "myWindowClass";
 const char g_appName[] = "Lazy Input";
