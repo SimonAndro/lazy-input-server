@@ -4,10 +4,10 @@ The controlled computer and the controlling device need to be connected to the s
 No need to install any mobile app, everything happens between the lazy input server on your computer and a browser on your mobile device.
 
 ### how the server looks like:
-![Server side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/serverapp.JPG "Server side view")
+![Server side view](https://github.com/SimonAndro/lazy-input-server/raw/main/assets/preview/serverapp.JPG "Server side view")
  
 ### how the client looks like: 
-![Client side view](https://github.com/SimonAndro/lazy-input-server/raw/main/preview/bg.bmp "Client side view") 
+![Client side view](https://github.com/SimonAndro/lazy-input-server/raw/main/assets/preview/bg.bmp "Client side view") 
   
   
 ### How to Use:
